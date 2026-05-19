@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Centelha - Pitch Deck</title>
+
+    <!-- Reveal.js Core CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reset.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Alpine.js & Chart.js & Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'], display: ['Outfit', 'sans-serif'] },
+                    colors: {
+                        genially: { bg: '#0B0D17', card: '#151828', primary: '#00F0FF', secondary: '#8A2BE2', accent: '#FF0055', hotspot: '#FFB800' }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        html, body, .reveal, .reveal .slide-background, .reveal .slides { 
+            background-color: #0B0D17 !important; 
+            color: #F8FAFC !important;
+            overflow: hidden;
+        }
+
+        /* Padronagem de Fundo (Tech Grid) para cara de slide corporativo */
+        body::before {
+            content: ''; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+            background-image: radial-gradient(rgba(255, 255, 255, 0.04) 2px, transparent 2px);
+            background-size: 40px 40px;
+        }
+
+        .reveal .controls, .reveal .progress { display: none !important; }
+
+        /* Slide Number Customizado do Reveal */
+        .reveal .slide-number {
+            background: transparent !important; color: #fff !important; font-family: 'Outfit', sans-serif !important;
+            font-size: 18px !important; bottom: 30px !important; right: 120px !important; font-weight: bold; opacity: 0.5;
+        }
+
+        /* Estrutura de Slide (Header superior esquerdo padronizado) */
+        .slide-header { position: absolute; top: 60px; left: 80px; text-align: left; z-index: 10; }
+        .slide-header h2 { font-family: 'Outfit', sans-serif; font-size: 2.5rem; font-weight: 700; margin-bottom: 8px; display: inline-block; position: relative; }
+        .slide-header p { color: #8BA1B5; font-size: 1.15rem; max-width: 700px; font-weight: 300; letter-spacing: 0.5px; }
+        .slide-header::after { content: ''; position: absolute; bottom: -18px; left: 0; width: 80px; height: 4px; background: linear-gradient(90deg, #00F0FF, #8A2BE2); border-radius: 2px; }
+
+        /* Container padrão que respeita o Header */
+        .content-area { width: 100%; height: 100%; padding: 180px 80px 80px 80px; display: flex; flex-direction: column; justify-content: center; z-index: 1; position: relative; }
+
+        .glass-panel { background: rgba(21, 24, 40, 0.7); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.06); border-radius: 16px; }
+        
+        .interactive-card { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .interactive-card:hover { transform: translateY(-8px); border-color: rgba(0, 240, 255, 0.3); box-shadow: 0 15px 30px -10px rgba(0, 240, 255, 0.15); z-index: 10; }
+
+        .text-gradient { background: linear-gradient(135deg, #00F0FF 0%, #8A2BE2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        .nav-btn { width: 50px; height: 50px; border-radius: 50%; display: flex; justify-content: center; align-items: center; transition: all 0.3s ease; cursor: pointer; backdrop-filter: blur(10px); }
+        .nav-btn-prev { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); }
+        .nav-btn-prev:hover { background: rgba(255,255,255,0.1); transform: translateX(-5px); }
+        .nav-btn-next { background: #00F0FF; color: #000; box-shadow: 0 0 15px rgba(0, 240, 255, 0.3); }
+        .nav-btn-next:hover { transform: translateX(5px) scale(1.05); box-shadow: 0 0 25px rgba(0, 240, 255, 0.5); }
+
+        .static-hotspot { position: relative !important; width: 70px; height: 70px; font-size: 1.8rem; box-shadow: 0 0 0 0 rgba(0, 240, 255, 0.7); animation: pulse-hotspot 2s infinite; border-radius: 50%; background: var(--primary); color: #fff; display: flex; justify-content: center; align-items: center; cursor: pointer; z-index: 50; transition: transform 0.2s; }
+        .static-hotspot:hover { transform: scale(1.15); }
+        @keyframes pulse-hotspot { 0% { box-shadow: 0 0 0 0 rgba(0, 240, 255, 0.7); } 70% { box-shadow: 0 0 0 20px rgba(0, 240, 255, 0); } 100% { box-shadow: 0 0 0 0 rgba(0, 240, 255, 0); } }
+
+        /* Aba / Tab Presentation Style */
+        .tab-btn { border-bottom: 2px solid transparent; transition: all 0.3s; opacity: 0.5; }
+        .tab-active { border-bottom-color: #00F0FF; color: #fff; opacity: 1; font-weight: bold; }
+    </style>
+</head>
+<body class="font-sans antialiased text-white bg-genially-bg">
+
+    <!-- MASTER TEMPLATE OVERLAYS (Header/Footer globais da apresentação) -->
+    <div class="fixed top-8 left-8 z-50 flex items-center gap-3 opacity-60">
+        <i class="fa-solid fa-satellite-dish text-[#00F0FF] text-xl"></i>
+        <span class="font-display font-bold tracking-widest text-sm uppercase">Centelha | Indoor Location</span>
+    </div>
+    
+    <div class="fixed bottom-8 left-8 z-50 opacity-40 text-xs tracking-widest uppercase font-semibold">
+        Proposta Confidencial • 2026
+    </div>
+
+    <!-- Barra de Progresso Customizada superior -->
+    <div class="fixed top-0 left-0 h-1 bg-white/5 w-full z-50">
+        <div id="custom-progress" class="h-full bg-gradient-to-r from-[#00F0FF] to-[#8A2BE2]" style="width: 0%;"></div>
+    </div>
+
+    <!-- Navegação -->
+    <div class="fixed bottom-6 right-6 z-[100] flex gap-3 items-center">
+        <div onclick="Reveal.prev()" class="nav-btn nav-btn-prev"><i class="fa-solid fa-chevron-left"></i></div>
+        <div onclick="Reveal.next()" class="nav-btn nav-btn-next"><i class="fa-solid fa-chevron-right text-lg"></i></div>
+    </div>
+
+    <div class="reveal">
+        <!-- Background Blur/Glows constantes -->
+        <div class="absolute w-[800px] h-[800px] bg-[#00F0FF]/5 top-[-20%] left-[-10%] rounded-full blur-[150px] -z-10 pointer-events-none"></div>
+        <div class="absolute w-[800px] h-[800px] bg-[#8A2BE2]/5 bottom-[-20%] right-[-10%] rounded-full blur-[150px] -z-10 pointer-events-none"></div>
+
+        <div class="slides w-full h-full">
+
+            <!-- SLIDE 1: CAPA -->
+            <section data-transition="fade">
+                <div class="w-full h-full flex flex-col items-center justify-center p-8 z-10 relative">
+                    <div class="text-center">
+                        <div class="inline-block bg-white/5 text-white border border-white/10 px-6 py-2 rounded-full uppercase tracking-widest text-sm mb-8 font-bold backdrop-blur-sm">
+                            <i class="fa-solid fa-bolt text-[#00F0FF] mr-2"></i> Programa Centelha
+                        </div>
+                        
+                        <h1 class="font-display text-6xl md:text-8xl font-black text-white mb-6 leading-tight">
+                            Localização <span class="text-gradient">Indoor</span>
+                        </h1>
+                        <h2 class="text-3xl font-light text-slate-300 mb-12 font-sans tracking-wide">
+                            Navegação Inteligente via Wi-Fi Fingerprinting
+                        </h2>
+                        
+                        <p class="text-xl text-slate-400 mb-14 max-w-3xl mx-auto font-light leading-relaxed">
+                            Apresentação Executiva sobre o uso de Redes Neurais para transformar a infraestrutura Wi-Fi existente em um radar de altíssima precisão.
+                        </p>
+                        
+                        <button onclick="Reveal.next()" class="px-12 py-4 border border-[#00F0FF] text-[#00F0FF] font-bold rounded-lg transition-all hover:bg-[#00F0FF] hover:text-black hover:shadow-[0_0_20px_rgba(0,240,255,0.3)] text-lg">
+                            Iniciar Apresentação <i class="fa-solid fa-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SLIDE 2: O PROBLEMA -->
+            <section data-transition="slide" x-data="{ modal: null }">
+                <div class="slide-header">
+                    <h2>O Problema</h2>
+                    <p>Entenda as limitações físicas e financeiras do rastreamento indoor atual</p>
+                </div>
+                
+                <div class="content-area">
+                    <div class="relative w-full max-w-5xl mx-auto h-[350px] glass-panel rounded-3xl flex items-center justify-between px-24 border border-white/10 bg-[#0B0D17]">
+                        
+                        <!-- Linha conectora -->
+                        <div class="absolute top-1/2 left-24 right-24 h-[2px] bg-white/10 -translate-y-1/2 z-0 border-t border-dashed border-white/20"></div>
+
+                        <!-- Hotspot 1 -->
+                        <div class="relative z-10 flex flex-col items-center group">
+                            <div @click="modal = 1" class="static-hotspot" style="background: #00F0FF; box-shadow: 0 0 0 0 rgba(0, 240, 255, 0.7);"><i class="fa-solid fa-building-shield"></i></div>
+                            <div class="mt-8 text-center bg-[#0B0D17] px-4 py-2 rounded-lg border border-white/5">
+                                <div class="text-[#00F0FF] text-base font-bold uppercase tracking-widest mb-1">Atenuação</div>
+                                <div class="text-white/50 text-sm">Bloqueio Físico</div>
+                            </div>
+                        </div>
+
+                        <!-- Hotspot 2 -->
+                        <div class="relative z-10 flex flex-col items-center group">
+                            <div @click="modal = 2" class="static-hotspot" style="animation-delay: 0.5s; background: #FF0055; box-shadow: 0 0 0 0 rgba(255, 0, 85, 0.7);"><i class="fa-solid fa-wave-square"></i></div>
+                            <div class="mt-8 text-center bg-[#0B0D17] px-4 py-2 rounded-lg border border-white/5">
+                                <div class="text-[#FF0055] text-base font-bold uppercase tracking-widest mb-1">Multipath</div>
+                                <div class="text-white/50 text-sm">Reflexão de Sinal</div>
+                            </div>
+                        </div>
+
+                        <!-- Hotspot 3 -->
+                        <div class="relative z-10 flex flex-col items-center group">
+                            <div @click="modal = 3" class="static-hotspot" style="animation-delay: 1s; background: #FFB800; box-shadow: 0 0 0 0 rgba(255, 184, 0, 0.7);"><i class="fa-solid fa-money-bill-trend-up"></i></div>
+                            <div class="mt-8 text-center bg-[#0B0D17] px-4 py-2 rounded-lg border border-white/5">
+                                <div class="text-[#FFB800] text-base font-bold uppercase tracking-widest mb-1">Custos Extras</div>
+                                <div class="text-white/50 text-sm">Hardware (Beacons)</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Modais de Detalhamento -->
+                    <template x-teleport="body">
+                        <div x-show="modal !== null" x-transition.opacity class="fixed inset-0 z-[999] bg-[#0B0D17]/95 flex items-center justify-center p-4 backdrop-blur-md">
+                            <div @click.away="modal = null" x-show="modal !== null" x-transition.scale.95 class="bg-[#151828] border border-white/10 p-12 rounded-2xl max-w-2xl w-full relative shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+                                <button @click="modal = null" class="absolute top-8 right-8 text-slate-400 hover:text-white bg-white/5 w-10 h-10 rounded-full flex items-center justify-center"><i class="fa-solid fa-xmark text-xl"></i></button>
+
+                                <div x-show="modal === 1">
+                                    <div class="flex items-center gap-4 mb-6">
+                                        <i class="fa-solid fa-building-shield text-4xl text-[#00F0FF]"></i>
+                                        <h3 class="font-display text-3xl font-bold text-[#00F0FF]">Atenuação Física</h3>
+                                    </div>
+                                    <p class="text-slate-300 text-lg leading-relaxed">Em ambientes indoor, paredes de concreto, aço e obstáculos bloqueiam o sinal dos satélites. O GPS precisa de "visada direta" para o céu, tornando o rastreamento impossível dentro de hospitais, shoppings ou indústrias modernas sem perda completa de conexão.</p>
+                                </div>
+                                <div x-show="modal === 2">
+                                    <div class="flex items-center gap-4 mb-6">
+                                        <i class="fa-solid fa-wave-square text-4xl text-[#FF0055]"></i>
+                                        <h3 class="font-display text-3xl font-bold text-[#FF0055]">Efeito Multipath</h3>
+                                    </div>
+                                    <p class="text-slate-300 text-lg leading-relaxed">Os poucos sinais de satélite que penetram o edifício rebatem nas paredes antes de chegar ao dispositivo móvel. Esse eco causa um atraso invisível, fazendo com que as coordenadas calculadas pelo celular pulem erraticamente pelo mapa, com erros de dezenas de metros.</p>
+                                </div>
+                                <div x-show="modal === 3">
+                                    <div class="flex items-center gap-4 mb-6">
+                                        <i class="fa-solid fa-money-bill-trend-up text-4xl text-[#FFB800]"></i>
+                                        <h3 class="font-display text-3xl font-bold text-[#FFB800]">Capex e Opex Elevados</h3>
+                                    </div>
+                                    <p class="text-slate-300 text-lg leading-relaxed">Para contornar os problemas, a solução atual do mercado exige a compra e instalação de milhares de antenas Bluetooth (Beacons) pelas paredes. Isso gera um gasto massivo de aquisição (Capex) e um trabalho infinito de manutenção para troca de baterias (Opex).</p>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </section>
+
+            <!-- SLIDE 3: SOLUÇÃO -->
+            <section data-transition="slide" x-data="{ tab: 'oque' }">
+                <div class="slide-header">
+                    <h2>Nossa Solução</h2>
+                    <p>Como utilizamos a Infraestrutura Existente aliada à Inteligência Artificial</p>
+                </div>
+                
+                <div class="content-area">
+                    <div class="max-w-6xl mx-auto w-full">
+                        <div class="flex gap-10 border-b border-white/10 mb-12">
+                            <button @click="tab = 'oque'" :class="tab === 'oque' ? 'tab-active' : ''" class="tab-btn pb-4 uppercase text-base tracking-widest font-semibold"><i class="fa-solid fa-wifi mr-2"></i> Fingerprinting</button>
+                            <button @click="tab = 'ia'" :class="tab === 'ia' ? 'tab-active' : ''" class="tab-btn pb-4 uppercase text-base tracking-widest font-semibold"><i class="fa-solid fa-brain mr-2"></i> Redes Neurais</button>
+                            <button @click="tab = 'vantagens'" :class="tab === 'vantagens' ? 'tab-active' : ''" class="tab-btn pb-4 uppercase text-base tracking-widest font-semibold"><i class="fa-solid fa-chart-line mr-2"></i> Benefícios</button>
+                        </div>
+
+                        <div class="glass-panel p-12 min-h-[380px] flex items-center relative overflow-hidden">
+                            
+                            <!-- TAB 1 -->
+                            <div x-show="tab === 'oque'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0" class="absolute inset-0 p-12 grid grid-cols-2 gap-12 items-center">
+                                <div>
+                                    <h3 class="text-3xl font-bold text-white mb-6">Mapeamento Magnético (RSSI)</h3>
+                                    <p class="text-slate-300 text-lg leading-relaxed mb-6">Em vez de focar no céu, medimos o chão. Todo edifício corporativo já possui dezenas de roteadores Wi-Fi instalados. Nós "fotografamos" a força de sinal de cada um desses roteadores para cada metro quadrado do local, criando uma <strong class="text-white">impressão digital eletromagnética única</strong>.</p>
+                                </div>
+                                <div class="bg-[#0B0D17] border border-white/5 rounded-2xl p-8 h-full flex flex-col justify-center items-center">
+                                    <i class="fa-solid fa-signal text-6xl text-[#00F0FF] mb-6"></i>
+                                    <p class="text-slate-400 text-sm uppercase tracking-widest font-bold">Coleta Passiva de Sinal</p>
+                                </div>
+                            </div>
+
+                            <!-- TAB 2 -->
+                            <div x-show="tab === 'ia'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0" class="absolute inset-0 p-12 grid grid-cols-2 gap-12 items-center" style="display: none;">
+                                <div>
+                                    <h3 class="text-3xl font-bold text-white mb-6">Processamento Neural em Nuvem</h3>
+                                    <p class="text-slate-300 text-lg leading-relaxed mb-6">Sinais de rádio sofrem pequenas oscilações devido ao movimento de pessoas e objetos. Para resolver isso, processamos os dados na nuvem com dois modelos poderosos:</p>
+                                    <ul class="text-slate-300 text-lg leading-relaxed space-y-3 list-disc list-inside">
+                                        <li><strong>VAE:</strong> Limpa o ruído do sinal instantaneamente.</li>
+                                        <li><strong>MLP:</strong> Crava a Coordenada Exata (X,Y) no mapa.</li>
+                                    </ul>
+                                </div>
+                                <div class="bg-[#0B0D17] border border-white/5 rounded-2xl p-8 h-full flex items-center justify-center gap-6">
+                                    <div class="text-center bg-white/5 p-4 rounded-xl"><i class="fa-solid fa-filter text-4xl text-[#8A2BE2] mb-3"></i><br><span class="text-sm font-bold text-slate-300">Filtro VAE</span></div>
+                                    <i class="fa-solid fa-arrow-right text-2xl text-slate-500"></i>
+                                    <div class="text-center bg-white/5 p-4 rounded-xl"><i class="fa-solid fa-bullseye text-4xl text-[#00F0FF] mb-3"></i><br><span class="text-sm font-bold text-slate-300">Previsão MLP</span></div>
+                                </div>
+                            </div>
+
+                            <!-- TAB 3 -->
+                            <div x-show="tab === 'vantagens'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0" class="absolute inset-0 p-12 grid grid-cols-3 gap-8" style="display: none;">
+                                <div class="bg-white/5 border border-white/10 rounded-2xl p-8 text-center flex flex-col justify-center items-center">
+                                    <i class="fa-solid fa-coins text-4xl text-emerald-400 mb-6"></i>
+                                    <h4 class="font-bold text-white text-xl mb-4">Custo Zero de Hardware</h4>
+                                    <p class="text-base text-slate-400 leading-relaxed">Sem compra de beacons, sem passagem de cabos, sem troca de baterias. Utilizamos 100% o roteador Wi-Fi que já existe na parede.</p>
+                                </div>
+                                <div class="bg-white/5 border border-white/10 rounded-2xl p-8 text-center flex flex-col justify-center items-center">
+                                    <i class="fa-solid fa-rocket text-4xl text-[#00F0FF] mb-6"></i>
+                                    <h4 class="font-bold text-white text-xl mb-4">Escala Ilimitada</h4>
+                                    <p class="text-base text-slate-400 leading-relaxed">Como é tudo via software, mapear um galpão logístico pequeno ou um aeroporto internacional exige o mesmo processo digital.</p>
+                                </div>
+                                <div class="bg-white/5 border border-white/10 rounded-2xl p-8 text-center flex flex-col justify-center items-center">
+                                    <i class="fa-solid fa-mobile-screen text-4xl text-[#8A2BE2] mb-6"></i>
+                                    <h4 class="font-bold text-white text-xl mb-4">Ubiquidade (BYOD)</h4>
+                                    <p class="text-base text-slate-400 leading-relaxed">O sistema roda nativamente nos celulares dos colaboradores ou nos crachás inteligentes que eles já utilizam diariamente.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SLIDE 4: ARQUITETURA -->
+            <section data-transition="slide" x-data="{ hover: null }">
+                <div class="slide-header">
+                    <h2>Arquitetura do Sistema</h2>
+                    <p>Stack Tecnológica Enterprise Moderna e Escalável</p>
+                </div>
+                
+                <div class="content-area">
+                    <div class="max-w-7xl mx-auto w-full grid grid-cols-4 gap-6">
+                        <div @mouseenter="hover = 1" @mouseleave="hover = null" :class="hover !== null && hover !== 1 ? 'opacity-40 scale-95' : 'opacity-100 scale-100'" class="glass-panel p-8 rounded-2xl interactive-card text-center">
+                            <i class="fa-brands fa-react text-5xl text-[#61DAFB] mb-6"></i>
+                            <h4 class="font-bold text-white text-xl mb-2">Mobile App</h4>
+                            <p class="text-[#61DAFB] text-sm font-semibold uppercase tracking-widest mb-6">React Native</p>
+                            <p class="text-base text-slate-400 leading-relaxed">Coleta passiva de sinais RSSI no plano de fundo e renderização da planta baixa interativa diretamente na tela do usuário.</p>
+                        </div>
+                        
+                        <div @mouseenter="hover = 2" @mouseleave="hover = null" :class="hover !== null && hover !== 2 ? 'opacity-40 scale-95' : 'opacity-100 scale-100'" class="glass-panel p-8 rounded-2xl interactive-card text-center">
+                            <i class="fa-solid fa-server text-5xl text-[#009688] mb-6"></i>
+                            <h4 class="font-bold text-white text-xl mb-2">Core API</h4>
+                            <p class="text-[#009688] text-sm font-semibold uppercase tracking-widest mb-6">Python FastAPI</p>
+                            <p class="text-base text-slate-400 leading-relaxed">Orquestração de microsserviços ultrarrápida, desenhada para suportar tráfego concorrente de milhares de localizações por segundo.</p>
+                        </div>
+
+                        <div @mouseenter="hover = 3" @mouseleave="hover = null" :class="hover !== null && hover !== 3 ? 'opacity-40 scale-95' : 'opacity-100 scale-100'" class="glass-panel p-8 rounded-2xl interactive-card text-center">
+                            <i class="fa-solid fa-brain text-5xl text-[#FF0055] mb-6"></i>
+                            <h4 class="font-bold text-white text-xl mb-2">Motor Neural</h4>
+                            <p class="text-[#FF0055] text-sm font-semibold uppercase tracking-widest mb-6">Cloud AI Inference</p>
+                            <p class="text-base text-slate-400 leading-relaxed">Modelos generativos (VAE) filtrando ruído e regressando coordenadas precisas rodando isoladamente em servidores na nuvem.</p>
+                        </div>
+
+                        <div @mouseenter="hover = 4" @mouseleave="hover = null" :class="hover !== null && hover !== 4 ? 'opacity-40 scale-95' : 'opacity-100 scale-100'" class="glass-panel p-8 rounded-2xl interactive-card text-center">
+                            <i class="fa-solid fa-database text-5xl text-[#336791] mb-6"></i>
+                            <h4 class="font-bold text-white text-xl mb-2">Data Storage</h4>
+                            <p class="text-[#336791] text-sm font-semibold uppercase tracking-widest mb-6">PostgreSQL</p>
+                            <p class="text-base text-slate-400 leading-relaxed">Gerenciamento seguro e redundante de bases cartográficas (Mapas Vetoriais) e Data Lake do histórico de movimentação.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SLIDE 5: RESULTADOS COM GRÁFICO DIDÁTICO -->
+            <section data-transition="slide">
+                <div class="slide-header">
+                    <h2>Resultados da Validação</h2>
+                    <p>Caso de Estudo Experimental: UFABC (>770 amostras coletadas)</p>
+                </div>
+                
+                <div class="content-area">
+                    <div class="max-w-7xl mx-auto w-full grid grid-cols-12 gap-8 items-stretch">
+                        
+                        <!-- Painel de Dados -->
+                        <div class="col-span-4 flex flex-col gap-6">
+                            <div class="bg-white/5 border-l-4 border-l-[#00F0FF] p-8 rounded-r-2xl shadow-lg flex-1 flex flex-col justify-center">
+                                <div class="text-sm text-slate-400 uppercase tracking-widest font-bold mb-2">Acurácia de Classificação</div>
+                                <div class="text-5xl font-display font-black text-white mb-2">100<span class="text-2xl text-[#00F0FF]">%</span></div>
+                                <p class="text-base text-slate-300 leading-relaxed mt-2">Capacidade perfeita de identificar em qual bloco/zona exata o dispositivo se encontra.</p>
+                            </div>
+                            <div class="bg-white/5 border-l-4 border-l-[#FF0055] p-8 rounded-r-2xl shadow-lg flex-1 flex flex-col justify-center">
+                                <div class="text-sm text-slate-400 uppercase tracking-widest font-bold mb-2">Erro Absoluto Médio</div>
+                                <div class="text-5xl font-display font-black text-white mb-2">3.82<span class="text-2xl text-[#FF0055]">m</span></div>
+                                <p class="text-base text-slate-300 leading-relaxed mt-2">Margem de erro final. Suficiente para localizar macas, empilhadeiras ou pessoas.</p>
+                            </div>
+                        </div>
+
+                        <!-- Chart.js Graph -->
+                        <div class="col-span-8 glass-panel p-10 flex flex-col">
+                            <div class="flex justify-between items-start mb-8">
+                                <div>
+                                    <h4 class="text-2xl font-bold text-white mb-2">Comparativo de Precisão (Margem de Erro)</h4>
+                                    <p class="text-base text-[#00F0FF]"><i class="fa-solid fa-arrow-left-long mr-2"></i> Gráfico Didático: Barras <strong>MENORES</strong> indicam que a tecnologia errou menos e é mais precisa.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="relative flex-1 w-full min-h-[250px]">
+                                <canvas id="accuracyChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SLIDE 6: CONCLUSÃO (NOVO SLIDE) -->
+            <section data-transition="zoom">
+                <div class="content-area items-center justify-center text-center p-12">
+                    <div class="inline-block bg-white/5 border border-white/10 px-8 py-3 rounded-full uppercase tracking-widest text-sm mb-10 font-bold backdrop-blur-md">
+                        <i class="fa-solid fa-flag-checkered text-[#00F0FF] mr-2"></i> Conclusão e Próximos Passos
+                    </div>
+                    
+                    <h2 class="font-display text-5xl md:text-6xl font-black text-white mb-8 leading-tight">
+                        O Futuro do Rastreamento Indoor<br>é <span class="text-gradient">Invisível</span> e Inteligente
+                    </h2>
+                    
+                    <p class="text-xl text-slate-300 max-w-4xl mx-auto mb-14 font-light leading-relaxed">
+                        Ao unir o Wi-Fi que as empresas já possuem com o poder das Redes Neurais na nuvem, estamos eliminando barreiras financeiras e tecnológicas.
+                    </p>
+                    
+                    <div class="glass-panel p-10 max-w-3xl mx-auto border-t-4 border-t-[#00F0FF] mb-12 shadow-[0_20px_50px_rgba(0,240,255,0.15)]">
+                        <p class="text-slate-300 text-lg leading-relaxed">A tecnologia base foi cientificamente validada. Com o apoio do edital, nossa meta é escalar a infraestrutura de processamento em nuvem, criar os painéis B2B e levar essa revolução para hospitais, logística e indústrias em todo o país.</p>
+                    </div>
+
+                    <button onclick="Reveal.slide(0)" class="px-10 py-4 bg-white/5 border border-white/20 hover:bg-white/10 text-white rounded-lg transition-all flex items-center gap-3 mx-auto font-bold uppercase tracking-widest text-sm">
+                        <i class="fa-solid fa-rotate-left"></i> Retornar ao Início
+                    </button>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <!-- Scripts do Core -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.js"></script>
+    <script>
+        Reveal.initialize({
+            width: '100%',
+            height: '100%',
+            margin: 0,
+            hash: true,
+            controls: false, 
+            progress: false, 
+            slideNumber: 'c/t', 
+            center: false,
+            transition: 'slide',
+            backgroundTransition: 'fade'
+        });
+
+        // Top Progress Bar
+        Reveal.on('slidechanged', event => {
+            const total = Reveal.getTotalSlides() - 1; 
+            const current = event.indexh;
+            const percent = (current / total) * 100;
+            document.getElementById('custom-progress').style.width = percent + '%';
+        });
+
+        // Chart.js
+        let chartInstance = null;
+        Reveal.on('slidechanged', event => {
+            if (event.indexh === 4 && !chartInstance) { // Slide 5
+                const ctx = document.getElementById('accuracyChart').getContext('2d');
+                Chart.defaults.color = '#8BA1B5';
+                Chart.defaults.font.family = 'Inter';
+                Chart.defaults.font.size = 14;
+
+                chartInstance = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: [
+                            ['Mercado Atual', '(Beacons/Infra Pesada)'], 
+                            ['Nossa IA Básica', '(Algoritmo KNN Estrito)'], 
+                            ['Nossa IA Avançada', '(Redes Neurais VAE+MLP)']
+                        ],
+                        datasets: [{
+                            label: 'Margem de Erro (Metros)',
+                            data: [8.5, 6.2, 3.82],
+                            backgroundColor: ['rgba(255, 255, 255, 0.05)', 'rgba(255, 255, 255, 0.1)', '#00F0FF'],
+                            borderColor: ['rgba(255, 255, 255, 0.2)', 'rgba(255, 255, 255, 0.3)', '#00F0FF'],
+                            borderWidth: 2,
+                            borderRadius: 8,
+                            barPercentage: 0.6
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y', 
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        animation: { duration: 2500, easing: 'easeOutElastic', delay: 400 },
+                        plugins: { 
+                            legend: { display: false },
+                            tooltip: {
+                                backgroundColor: '#151828',
+                                titleFont: { size: 16, family: 'Outfit' },
+                                bodyFont: { size: 16, family: 'Inter' },
+                                padding: 15,
+                                borderColor: 'rgba(255,255,255,0.1)',
+                                borderWidth: 1
+                            }
+                        },
+                        scales: {
+                            x: { 
+                                beginAtZero: true, 
+                                max: 10,
+                                grid: { color: 'rgba(255,255,255,0.05)' },
+                                title: { display: true, text: 'Metros de Erro', color: '#8BA1B5', font: {size: 14, weight: 'bold'} }
+                            },
+                            y: { 
+                                grid: { display: false },
+                                ticks: { color: '#fff', font: {weight: 'bold'} }
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
